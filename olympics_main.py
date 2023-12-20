@@ -75,17 +75,17 @@ if user_menu == 'Overall Analysis':
 
     st.header('Participating Nations over the year')
     nations_over_time = helper.data_over_time(df, 'region')
-    fig = plt.line(nations_over_time, x='Edition', y='region')
+    fig = plt.line(nations_over_time, x='region', y='count')
     st.plotly_chart(fig)
 
     st.header('Events over the year')
     events_over_time = helper.data_over_time(df, 'Event')
-    fig = plt.line(events_over_time, x='Edition', y='Event')
+    fig = plt.line(events_over_time, x='Event', y='count')
     st.plotly_chart(fig)
 
     st.header('Athletes over the year')
     athletes_over_time = helper.data_over_time(df, 'Name')
-    fig = plt.line(athletes_over_time, x='Edition', y='Name')
+    fig = plt.line(athletes_over_time, x='Name', y='count')
     st.plotly_chart(fig)
 
     st.title('No. of Events over time (Every Sport)')
@@ -124,7 +124,10 @@ if user_menu == 'Country-wise Analysis':
     pt = helper.country_event_heatmap(df, selected_country)
     fig, ax = px.subplots(figsize=(20, 20))
 
-    ax = sns.heatmap(pt, annot=True)
+    if not pt.empty:
+        ax = sns.heatmap(pt, annot=True)
+    else:
+        st.write("No data to display.")
     st.pyplot(fig)
 
     st.title("Top 15 Athletes of " + selected_country)
@@ -156,7 +159,7 @@ if user_menu == 'Athlete-wise Analysis':
 
     temp_df = helper.weight_v_height(df, select_sport)
     fig, ax = px.subplots()
-    ax = sns.scatterplot(temp_df['Weight'], temp_df['Height'], hue=temp_df['Medal'], style=temp_df['Sex'], s=100)
+    ax = sns.scatterplot(x=temp_df['Weight'], y=temp_df['Height'], hue=temp_df['Medal'], style=temp_df['Sex'], s=100)
     st.pyplot(fig)
 
     st.title('Men vs Women participation over the years')
